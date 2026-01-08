@@ -888,33 +888,23 @@ function hideFileOptions() {
     document.getElementById('mainContent').style.display = 'block';
 }
 
-// 进度更新函数
-function updateProgress(topicPercent, quizPercent, videoPercent) {
-    document.getElementById('topicProgress').textContent = topicPercent + '%';
-    document.getElementById('quizProgress').textContent = quizPercent + '%';
-    document.getElementById('videoProgress').textContent = videoPercent + '%';
-    
-    document.getElementById('topicBar').style.width = topicPercent + '%';
-    document.getElementById('quizBar').style.width = quizPercent + '%';
-    document.getElementById('videoBar').style.width = videoPercent + '%';
-    
-    // 保存到本地存储
-    localStorage.setItem('progress', JSON.stringify({
-        topic: topicPercent,
-        quiz: quizPercent,
-        video: videoPercent
-    }));
-}
-
-// 加载进度
+document.addEventListener('DOMContentLoaded', function() {
+    showLoginForm();
+    // 确保进度从0开始
+    if (!localStorage.getItem('progress')) {
+        localStorage.setItem('progress', JSON.stringify({topic: 0, quiz: 0, video: 0}));
+    }
+    loadProgress();
+});
+	
 function loadProgress() {
     const savedProgress = localStorage.getItem('progress');
     if (savedProgress) {
         const progress = JSON.parse(savedProgress);
         updateProgress(progress.topic, progress.quiz, progress.video);
     } else {
-        // 默认进度
-        updateProgress(55, 60, 40);
+        // 从0开始
+        updateProgress(0, 0, 0);
     }
 }
 
@@ -943,8 +933,59 @@ function updateProgressOnActivity(activityType) {
     
     updateProgress(progress.topic, progress.quiz, progress.video);
 }
+// 添加这些函数来更新进度
+function updateProgressManually() {
+    const progress = JSON.parse(localStorage.getItem('progress') || '{"topic":0,"quiz":0,"video":0}');
+    
+    // 询问用户完成了什么活动
+    const activity = prompt('What did you complete?\n1. Practice questions\n2. Quiz\n3. Video tutorial\n\nEnter 1, 2, or 3:');
+    
+    switch(activity) {
+        case '1':
+            progress.topic = Math.min(100, progress.topic + 10);
+            alert('Great! Practice progress increased by 10%');
+            break;
+        case '2':
+            progress.quiz = Math.min(100, progress.quiz + 15);
+            alert('Well done! Quiz progress increased by 15%');
+            break;
+        case '3':
+            progress.video = Math.min(100, progress.video + 20);
+            alert('Good job! Video progress increased by 20%');
+            break;
+        default:
+            alert('No progress updated. Please enter 1, 2, or 3 next time.');
+    }
+    
+    updateProgress(progress.topic, progress.quiz, progress.video);
+}
 
-// 修复后的微分计算器函数
+// 自动更新进度的函数
+function completePractice() {
+    const progress = JSON.parse(localStorage.getItem('progress') || '{"topic":0,"quiz":0,"video":0}');
+    if (progress.topic < 100) {
+        progress.topic = Math.min(100, progress.topic + 5);
+        updateProgress(progress.topic, progress.quiz, progress.video);
+    }
+}
+
+function completeQuiz() {
+    const progress = JSON.parse(localStorage.getItem('progress') || '{"topic":0,"quiz":0,"video":0}');
+    if (progress.quiz < 100) {
+        progress.quiz = Math.min(100, progress.quiz + 10);
+        updateProgress(progress.topic, progress.quiz, progress.video);
+    }
+}
+
+function completeVideo() {
+    const progress = JSON.parse(localStorage.getItem('progress') || '{"topic":0,"quiz":0,"video":0}');
+    if (progress.video < 100) {
+        progress.video = Math.min(100, progress.video + 15);
+        updateProgress(progress.topic, progress.quiz, progress.video);
+    }
+}
+
+// 替换 calculateDerivative() 函数
 function calculateDerivative() {
     const input = document.getElementById('functionInput').value.trim();
     const resultElement = document.getElementById('derivativeResult');
@@ -956,86 +997,154 @@ function calculateDerivative() {
         return;
     }
     
-    let derivative = '';
-    let steps = 'Steps:\n';
-    
+    // 简单但有效的微分计算
     try {
-        // 解析多项式的每个项
-        const terms = input.split(/(?=[+-])/).map(term => term.trim()).filter(term => term);
+        // 清理输入，允许空格
+        let func = input.replace(/\s+/g, '');
         
-        const derivativeTerms = [];
+        // 支持的函数类型
+        let derivative = '';
+        let steps = 'Steps:\n';
         
-        for (let term of terms) {
-            let cleanTerm = term.replace(/\s+/g, '');
-            
-            // 处理符号
-            let sign = '';
-            if (cleanTerm.startsWith('+') || cleanTerm.startsWith('-')) {
-                sign = cleanTerm[0];
-                cleanTerm = cleanTerm.substring(1);
-            }
-            
-            // 处理 x^n 形式
-            if (cleanTerm.includes('x^')) {
-                const parts = cleanTerm.split('x^');
-                let coefficient = parts[0] ? (parts[0] === '' ? 1 : parseFloat(parts[0])) : 1;
-                const power = parseFloat(parts[1]);
+        // 1. 幂函数: ax^n
+        if (func.includes('x^')) {
+            const match = func.match(/(-?\d*)x\^(-?\d+)/);
+            if (match) {
+                const coefficient = match[1] === '' || match[1] === '-' ? (match[1] === '-' ? -1 : 1) : parseInt(match[1]);
+                const power = parseInt(match[2]);
                 
                 const newCoefficient = coefficient * power;
                 const newPower = power - 1;
                 
-                let newTerm = '';
-                if (newCoefficient !== 0) {
-                    newTerm = (sign === '-' ? '-' : '') + 
-                             (Math.abs(newCoefficient) !== 1 ? Math.abs(newCoefficient) : '') + 
-                             'x' + 
-                             (newPower !== 1 ? '^' + newPower : '');
-                    
-                    if (sign === '-' && newCoefficient > 0) {
-                        newTerm = '-' + newTerm;
-                    }
-                    
-                    derivativeTerms.push(newTerm);
-                    steps += `Power rule: d/dx(${sign}${coefficient}x^${power}) = ${newTerm}\n`;
+                if (newPower === 0) {
+                    derivative = newCoefficient.toString();
+                } else if (newPower === 1) {
+                    derivative = newCoefficient + 'x';
+                } else {
+                    derivative = newCoefficient + 'x^' + newPower;
                 }
-            }
-            // 处理 x 形式
-            else if (cleanTerm.includes('x')) {
-                const coefficient = cleanTerm.replace('x', '');
-                const coeffValue = coefficient === '' ? 1 : parseFloat(coefficient);
                 
-                const newTerm = (sign === '-' ? '-' : '') + coeffValue;
-                derivativeTerms.push(newTerm);
-                steps += `d/dx(${sign}${coeffValue}x) = ${newTerm}\n`;
-            }
-            // 处理常数
-            else if (!isNaN(cleanTerm)) {
-                steps += `d/dx(${sign}${cleanTerm}) = 0\n`;
-                // 常数的导数为0，不添加到结果中
+                steps += `Power rule: d/dx(${coefficient}x^${power}) = ${newCoefficient}x^${newPower}\n`;
             }
         }
-        
-        // 组合结果
-        derivative = derivativeTerms.join(' + ').replace(/\+\s*\-/g, ' - ');
-        if (derivative === '') {
+        // 2. 线性函数: ax
+        else if (func.includes('x') && !func.includes('^')) {
+            const match = func.match(/(-?\d*)x/);
+            if (match) {
+                const coefficient = match[1] === '' || match[1] === '-' ? (match[1] === '-' ? -1 : 1) : parseInt(match[1]);
+                derivative = coefficient.toString();
+                steps += `d/dx(${coefficient}x) = ${coefficient}\n`;
+            }
+        }
+        // 3. 三角函数
+        else if (func === 'sin(x)') {
+            derivative = 'cos(x)';
+            steps += 'd/dx(sin(x)) = cos(x)\n';
+        }
+        else if (func === 'cos(x)') {
+            derivative = '-sin(x)';
+            steps += 'd/dx(cos(x)) = -sin(x)\n';
+        }
+        // 4. 指数和对数
+        else if (func === 'e^x') {
+            derivative = 'e^x';
+            steps += 'd/dx(e^x) = e^x\n';
+        }
+        else if (func === 'ln(x)') {
+            derivative = '1/x';
+            steps += 'd/dx(ln(x)) = 1/x\n';
+        }
+        // 5. 多项式: 3x^2 + 2x + 1
+        else if (func.includes('+') || func.includes('-')) {
+            // 简单的多项式处理
+            derivative = calculatePolynomialDerivative(func);
+            steps += 'Using power rule on each term\n';
+        }
+        // 6. 常数
+        else if (!isNaN(func)) {
             derivative = '0';
+            steps += 'd/dx(constant) = 0\n';
+        }
+        else {
+            derivative = '无法计算，请使用标准格式';
+            steps = '支持格式: x^2, 3x, sin(x), cos(x), e^x, ln(x), 3x^2+2x+1';
         }
         
         resultElement.textContent = `f'(x) = ${derivative}`;
         stepsElement.textContent = steps;
         
+        // 计算成功时增加一点点进度（可选）
+        const progress = JSON.parse(localStorage.getItem('progress') || '{"topic":0,"quiz":0,"video":0}');
+        if (progress.topic < 100 && derivative !== '无法计算，请使用标准格式') {
+            progress.topic = Math.min(100, progress.topic + 1);
+            updateProgress(progress.topic, progress.quiz, progress.video);
+        }
+        
     } catch (error) {
-        console.error('Calculation error:', error);
-        resultElement.textContent = 'Error calculating derivative';
-        stepsElement.textContent = 'Please check your input format. Examples: 3x^2 + 2x - 5, x^3, 4x';
+        resultElement.textContent = 'Error: 请使用标准格式';
+        stepsElement.textContent = '示例: 3x^2, 2x+5, sin(x), e^x';
     }
 }
 
+// 多项式微分计算
+function calculatePolynomialDerivative(func) {
+    // 分割各项
+    const terms = func.replace(/([+-])/g, ' $1').trim().split(/\s+/);
+    let derivativeTerms = [];
+    
+    for (let term of terms) {
+        if (term === '+' || term === '-') continue;
+        
+        let cleanTerm = term;
+        let sign = '';
+        
+        if (cleanTerm.startsWith('+') || cleanTerm.startsWith('-')) {
+            sign = cleanTerm[0];
+            cleanTerm = cleanTerm.substring(1);
+        }
+        
+        // 处理 x^n
+        if (cleanTerm.includes('x^')) {
+            const parts = cleanTerm.split('x^');
+            let coeff = parts[0] === '' ? 1 : parseFloat(parts[0]);
+            const power = parseFloat(parts[1]);
+            
+            if (sign === '-') coeff = -coeff;
+            
+            const newCoeff = coeff * power;
+            const newPower = power - 1;
+            
+            let newTerm = '';
+            if (newCoeff !== 0) {
+                newTerm = (newCoeff >= 0 ? '+' : '') + 
+                         (Math.abs(newCoeff) !== 1 ? Math.abs(newCoeff) : '') + 
+                         'x' + 
+                         (newPower !== 1 ? '^' + newPower : '');
+                derivativeTerms.push(newTerm);
+            }
+        }
+        // 处理 x
+        else if (cleanTerm.includes('x') && !cleanTerm.includes('^')) {
+            let coeff = cleanTerm.replace('x', '');
+            coeff = coeff === '' ? 1 : parseFloat(coeff);
+            
+            if (sign === '-') coeff = -coeff;
+            
+            if (coeff !== 0) {
+                derivativeTerms.push((coeff >= 0 ? '+' : '') + coeff);
+            }
+        }
+        // 常数项忽略（导数为0）
+    }
+    
+    let result = derivativeTerms.join('');
+    if (result.startsWith('+')) result = result.substring(1);
+    return result || '0';
+}
 
-
-// 显示示例
+// 修改 showExample() 函数
 function showExample() {
-    document.getElementById('functionInput').value = '2x^3 + 5x^2 - 3x + 7';
+    document.getElementById('functionInput').value = '3x^2 + 2x - 5';
     calculateDerivative();
 }
 
