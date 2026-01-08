@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Innomath Hub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+
+body{
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #4a6bc2 0%, #027499 100%);
+    min-height: 100vh;
+}
+
+/* 🔐 登录/注册页面样式 */
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.auth-container {
+    max-width: 400px;
+    width: 90%;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    padding: 40px 30px;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    text-align: center;
+}
+
+.auth-logo {
+    color: white;
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.auth-subtitle {
+    color: #bbdefb;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+/* 切换标签样式 */
+.auth-tabs {
+    display: flex;
+    margin-bottom: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 12px;
+    color: white;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.auth-tab.active {
+    background: white;
+    color: #1a237e;
+}
+
+/* 表单样式 */
+.auth-form {
+    display: block;
+}
+
+.hidden {
+    display: none;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    color: white;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: all 0.3s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #4a6bc2;
+    box-shadow: 0 0 0 3px rgba(74, 107, 194, 0.3);
+}
+
+.auth-button {
+    width: 100%;
+    background: white;
+    color: #1a237e;
+    padding: 16px;
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 10px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.auth-button:hover {
+    background: #f5f5f5;
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+}
+
+.error-message {
+    color: #d32f2f;
+    font-size: 15px;
+    margin: 15px 0;
+    display: none;
+    background: #ffebee;
+    padding: 14px;
+    border-radius: 8px;
+    border: 2px solid #ef5350;
+    font-weight: 700;
+    text-align: center;
+    animation: shake 0.5s ease;
+    box-shadow: 0 4px 12px rgba(239, 83, 80, 0.2);
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.success-message {
+    color: #4CAF50;
+    font-size: 14px;
+    margin-top: 15px;
+    display: none;
+}
+
+.guest-option {
+    margin-top: 25px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+}
+
+.guest-link {
+    color: #bbdefb;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.main-container {
+    display: none;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    overflow: hidden;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+header{
+    padding: 40px 20px;
+    color: white;
+    background: rgba(255, 255, 255, 0.15);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center; 
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+}
+
+header h1{
+    margin: 0 0 15px 0;
+    font-size: 50px;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    text-align: center; 
+    width: 100%; 
+}
+
+.subtitle {
+    font-size: 18px;
+    color: #ffffff;
+    margin-bottom: 20px;
+    font-weight: 500;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    text-align: center; 
+    width: 100%; 
+}
+
+.separator {
+    height: 1px;
+    background: rgba(255,255,255,0.3);
+    margin: 25px auto;
+    width: 100px;
+    text-align: center; 
+}
+
+.tagline {
+    font-size: 18px;
+    color: #ffffff;
+    font-weight: 500;
+    margin-top: 15px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    text-align: center; 
+    width: 100%; 
+}
+
+.main-content {
+    padding: 40px 20px;
+}
+
+.section-title {
+    color: white;
+    font-size: 28px;
+    margin-bottom: 25px;
+    font-weight: 600;
+	text-align:center;
+}
+
+.main-button {
+    display: block;
+    background: white;
+    color: #1a237e;
+    padding: 18px 30px;
+    font-size: 20px;
+    font-weight: 700;
+    border-radius: 10px;
+    text-decoration: none;
+    margin: 15px auto;
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+    width: 320px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.main-button:hover {
+    background: #f5f5f5;
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+}
+
+.file-options {
+    display: none;
+    padding: 40px 20px;
+}
+
+.file-title {
+    color: white;
+    font-size: 24px;
+    margin-bottom: 30px;
+    font-weight: 600;
+	text-align:center;
+}
+
+.file-button {
+    display: block;
+    background: rgba(255, 255, 255, 0.9);
+    color: #1a237e;
+    padding: 18px 40px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 10px;
+    text-decoration: none;
+    margin: 15px auto;
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+    width: 280px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.file-button:hover {
+    background: white;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.back-button {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 12px 30px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    text-decoration: none;
+    margin-top: 30px;
+    transition: all 0.3s;
+    border: 1px solid rgba(255,255,255,0.3);
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+footer {
+    padding: 20px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+	text-align: center;
+}
+
+/* 进度条样式 */
+.progress-section-bottom {
+    margin: 50px auto 30px auto;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    max-width: 500px;
+}
+
+.progress-title {
+    color: white;
+    font-size: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.progress-container {
+    margin-bottom: 20px;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    color: white;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.progress-percent {
+    color: #FFD700;
+    font-weight: 600;
+}
+
+.progress-bar {
+    height: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4FC3F7, #2979FF);
+    border-radius: 5px;
+    transition: width 0.5s ease;
+}
+
+/* 计算器样式 */
+.calculator-section {
+    margin: 40px auto 30px auto;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    max-width: 500px;
+}
+
+.calculator-title {
+    color: white;
+    font-size: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.calculator-input {
+    color: white;
+}
+
+.calculator-input label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+#functionInput {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+.calculator-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.calc-btn {
+    flex: 1;
+    padding: 12px;
+    background: white;
+    color: #1a237e;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.calc-btn:hover {
+    background: #f5f5f5;
+    transform: translateY(-2px);
+}
+
+.example-btn {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.result-box {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    border-left: 4px solid #4FC3F7;
+}
+
+.result-box h4 {
+    margin-top: 0;
+    color: white;
+}
+
+#derivativeResult, #stepByStep {
+    font-family: 'Courier New', monospace;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 5px;
+    margin: 5px 0;
+}
+
+.quick-functions {
+    margin-top: 20px;
+}
+
+.quick-functions p {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.quick-btn {
+    padding: 8px 12px;
+    margin: 0 5px 5px 0;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.quick-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+</style>
+</head>
+<body>
+
+<!-- 🔐 登录/注册页面 -->
+<div class="auth-page" id="authPage">
+    <div class="auth-container">
+        <div class="auth-logo">INNOMATH HUB</div>
+        <div class="auth-subtitle">Your Ultimate Study Companion</div>
+        
+        <!-- 切换标签 -->
+        <div class="auth-tabs">
+            <div class="auth-tab active" onclick="showLoginForm()">LOGIN</div>
+            <div class="auth-tab" onclick="showRegisterForm()">CREATE ACCOUNT</div>
+        </div>
+        
+        <!-- 登录表单 -->
+        <form class="auth-form" id="loginForm" onsubmit="event.preventDefault(); login();">
+            <div class="input-group">
+                <label for="loginUsername">Username</label>
+                <input type="text" id="loginUsername" placeholder="Enter your username" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter your password" required>
+            </div>
+            
+            <div class="error-message" id="loginError">
+                Invalid username or password
+            </div>
+            
+            <button type="submit" class="auth-button">LOGIN</button>
+            
+            <div class="guest-option">
+                Or continue as <span class="guest-link" onclick="continueAsGuest()">Guest</span>
+            </div>
+        </form>
+        
+        <!-- 注册表单 -->
+        <form class="auth-form hidden" id="registerForm" onsubmit="event.preventDefault(); register();">
+            <div class="input-group">
+                <label for="regUsername">Username</label>
+                <input type="text" id="regUsername" placeholder="Choose a username" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="regEmail">Email</label>
+                <input type="email" id="regEmail" placeholder="Enter your email" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="regPassword">Password</label>
+                <input type="password" id="regPassword" placeholder="Choose a password" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="regConfirmPassword">Confirm Password</label>
+                <input type="password" id="regConfirmPassword" placeholder="Confirm password" required>
+            </div>
+            
+            <div class="error-message" id="registerError">
+                Passwords do not match or username already exists
+            </div>
+            
+            <div class="success-message" id="registerSuccess">
+                Account created successfully! Please login.
+            </div>
+            
+            <button type="submit" class="auth-button">CREATE ACCOUNT</button>
+            
+            <div class="guest-option">
+                Already have an account? <span class="guest-link" onclick="showLoginForm()">Login here</span>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 主内容 -->
+<div class="main-container" id="mainContainer">
+    <div class="container">
+        <header>
+            <h1>INNOMATH HUB</h1>
+            <div class="subtitle">Practice today, conquer tomorrow.</div>
+            
+            <div class="separator"></div>
+            
+            <div class="tagline">Your Ultimate Study Companion</div>
+        </header>
+        
+        <div class="main-content" id="mainContent">
+            <div class="section-title">Study Materials</div>
+            <button class="main-button" onclick="showFileOptions()">🖊Topic 9 QUESTIONS</button>
+            <button class="main-button" onclick="openGoogleForm()">QUIZ</button>
+			<button class="main-button" onclick="showYoutubeOptions()">🎦VIDEO TUTORIALS</button>
+        </div>
+        
+        <div class="file-options" id="fileOptions">
+            <div class="file-title">Select File </div>
+            <a href="https://drive.google.com/file/d/1n-8998E7Znrykz5ZyOHFDv94RhMYDno4/view?usp=sharing" class="file-button" target="_blank">KMNS</a>
+            <a href="https://drive.google.com/file/d/1AP6yhfksl5VfavpI-S6dts6z3vslP9YO/view?usp=sharing" class="file-button" target="_blank">KMM</a>
+            <a href="https://drive.google.com/file/d/1qZly6g2X6s4MaT1wkZ48n9B0Fg0oEQGN/view?usp=sharing" class="file-button" target="_blank">KMPK</a>
+            <button class="back-button" onclick="hideFileOptions()">← Back to Main</button>
+        </div>
+        
+		<div class="file-options" id="youtubeOptions">
+			<div class="file-title">Differentiation Tutorials</div>
+    
+			<a href="" class="file-button" target="_blank">📘 Differentiation Basics</a>
+			<a href="https://www.youtube.com/watch?v=WUvTyaaNkzM" class="file-button" target="_blank">📗 Chain Rule Tutorial</a>
+			<a href="https://www.youtube.com/watch?v=YG15m2VwSjA" class="file-button" target="_blank">📙 Product & Quotient Rules</a>
+			<a href="https://www.youtube.com/watch?v=ANyVpMS3HL4" class="file-button" target="_blank">📒 Applications of Derivatives</a>
+			<button class="back-button" onclick="hideYoutubeOptions()">← Back to Main</button>
+		</div>
+
+        <!-- 进度条部分 -->
+        <div class="progress-section-bottom" id="progressSection">
+            <h3 class="progress-title">📊 Your Learning Progress</h3>
+            
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Topic 9 Completion</span>
+                    <span class="progress-percent" id="topicProgress">55%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="topicBar" style="width: 55%"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Quiz Performance</span>
+                    <span class="progress-percent" id="quizProgress">60%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="quizBar" style="width: 60%"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Video Tutorials Watched</span>
+                    <span class="progress-percent" id="videoProgress">40%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="videoBar" style="width: 40%"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 微分计算器 -->
+        <div class="calculator-section" id="calculatorSection">
+            <h3 class="calculator-title">🧮 Differentiation Calculator</h3>
+            
+            <div class="calculator-input">
+                <label for="functionInput">Enter function f(x):</label>
+                <input type="text" id="functionInput" placeholder="e.g., 3x^2 + 2x - 5" value="3x^2 + 2x - 5">
+                
+                <div class="calculator-buttons">
+                    <button class="calc-btn" onclick="calculateDerivative()">Calculate Derivative</button>
+                    <button class="calc-btn example-btn" onclick="showExample()">Show Example</button>
+                </div>
+                
+                <div class="result-box" id="resultBox">
+                    <h4>Result:</h4>
+                    <p id="derivativeResult">Enter a function above</p>
+                    <p id="stepByStep"></p>
+                </div>
+                
+                <div class="quick-functions">
+                    <p>Quick functions:</p>
+                    <button class="quick-btn" onclick="insertFunction('x^2')">x²</button>
+                    <button class="quick-btn" onclick="insertFunction('sin(x)')">sin(x)</button>
+                    <button class="quick-btn" onclick="insertFunction('cos(x)')">cos(x)</button>
+                    <button class="quick-btn" onclick="insertFunction('e^x')">eˣ</button>
+                    <button class="quick-btn" onclick="insertFunction('ln(x)')">ln(x)</button>
+                </div>
+            </div>
+        </div>
+		
+        <footer>
+            © 2026 Innomathematics Hub. All rights reserved.
+        </footer>
+    </div>
+</div>
+
+<script>
+// 存储用户数据（在实际应用中应该使用服务器数据库）
+let users = JSON.parse(localStorage.getItem('innomath_users')) || [
+    {username: 'admin', email: 'admin@example.com', password: '1234'}
+];
+
+// 切换表单显示
+function showLoginForm() {
+    document.getElementById('loginForm').classList.remove('hidden');
+    document.getElementById('registerForm').classList.add('hidden');
+    document.querySelectorAll('.auth-tab')[0].classList.add('active');
+    document.querySelectorAll('.auth-tab')[1].classList.remove('active');
+    clearMessages();
+}
+
+function showRegisterForm() {
+    document.getElementById('loginForm').classList.add('hidden');
+    document.getElementById('registerForm').classList.remove('hidden');
+    document.querySelectorAll('.auth-tab')[0].classList.remove('active');
+    document.querySelectorAll('.auth-tab')[1].classList.add('active');
+    clearMessages();
+}
+
+function clearMessages() {
+    document.getElementById('loginError').style.display = 'none';
+    document.getElementById('registerError').style.display = 'none';
+    document.getElementById('registerSuccess').style.display = 'none';
+}
+
+// 注册功能
+function register() {
+    const username = document.getElementById('regUsername').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const password = document.getElementById('regPassword').value;
+    const confirmPassword = document.getElementById('regConfirmPassword').value;
+    
+    const errorElement = document.getElementById('registerError');
+    const successElement = document.getElementById('registerSuccess');
+    
+    // 清除之前的消息
+    errorElement.style.display = 'none';
+    successElement.style.display = 'none';
+    
+    // 验证输入
+    if (password !== confirmPassword) {
+        errorElement.textContent = 'Passwords do not match';
+        errorElement.style.display = 'block';
+        return;
+    }
+    
+    if (password.length < 4) {
+        errorElement.textContent = 'Password must be at least 4 characters';
+        errorElement.style.display = 'block';
+        return;
+    }
+    
+    // 检查用户名是否已存在
+    if (users.some(user => user.username === username)) {
+        errorElement.textContent = 'Username already exists';
+        errorElement.style.display = 'block';
+        return;
+    }
+    
+    // 检查邮箱是否已存在
+    if (users.some(user => user.email === email)) {
+        errorElement.textContent = 'Email already registered';
+        errorElement.style.display = 'block';
+        return;
+    }
+    
+    // 创建新用户
+    const newUser = {
+        username: username,
+        email: email,
+        password: password
+    };
+    
+    users.push(newUser);
+    localStorage.setItem('innomath_users', JSON.stringify(users));
+    
+    // 显示成功消息
+    successElement.textContent = 'Account created successfully! Please login.';
+    successElement.style.display = 'block';
+    
+    // 清空表单
+    document.getElementById('regUsername').value = '';
+    document.getElementById('regEmail').value = '';
+    document.getElementById('regPassword').value = '';
+    document.getElementById('regConfirmPassword').value = '';
+    
+    // 3秒后切换到登录表单
+    setTimeout(() => {
+        showLoginForm();
+        document.getElementById('loginUsername').value = username;
+    }, 2000);
+}
+
+// 登录功能
+function login() {
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const errorElement = document.getElementById('loginError');
+    
+    errorElement.style.display = 'none';
+    
+    // 查找用户
+    const user = users.find(u => u.username === username && u.password === password);
+    
+    if (user) {
+        // 登录成功
+        document.getElementById('authPage').style.display = 'none';
+        document.getElementById('mainContainer').style.display = 'block';
+        // 可以在这里存储当前用户信息
+        localStorage.setItem('current_user', JSON.stringify(user));
+    } else {
+        // 登录失败
+        errorElement.style.display = 'block';
+    }
+}
+
+// 访客访问
+function continueAsGuest() {
+    document.getElementById('authPage').style.display = 'none';
+    document.getElementById('mainContainer').style.display = 'block';
+}
+
+// 按Enter键提交表单
+document.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        if (!document.getElementById('loginForm').classList.contains('hidden')) {
+            login();
+        } else {
+            register();
+        }
+    }
+});
+
+// 原有功能保持不变
+function showFileOptions() {
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('fileOptions').style.display = 'block';
+}
+
+function openGoogleForm() {
+    // 替换成你的Google Form链接
+    window.open('https://forms.gle/iuWpAK8gUEqwYqVp8', '_blank');
+}
+
+function hideFileOptions() {
+    document.getElementById('fileOptions').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+}
+
+// 页面加载时显示登录表单
+document.addEventListener('DOMContentLoaded', function() {
+    showLoginForm();
+});
+
+function showYoutubeOptions() {
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('youtubeOptions').style.display = 'block';
+}
+
+// 隐藏YouTube选项
+function hideYoutubeOptions() {
+    document.getElementById('youtubeOptions').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+}
+
+// 修改原来的隐藏函数，添加YouTube选项
+function hideFileOptions() {
+    document.getElementById('fileOptions').style.display = 'none';
+    document.getElementById('youtubeOptions').style.display = 'none'; // 添加这一行
+    document.getElementById('mainContent').style.display = 'block';
+}
+
+// 进度更新函数
+function updateProgress(topicPercent, quizPercent, videoPercent) {
+    document.getElementById('topicProgress').textContent = topicPercent + '%';
+    document.getElementById('quizProgress').textContent = quizPercent + '%';
+    document.getElementById('videoProgress').textContent = videoPercent + '%';
+    
+    document.getElementById('topicBar').style.width = topicPercent + '%';
+    document.getElementById('quizBar').style.width = quizPercent + '%';
+    document.getElementById('videoBar').style.width = videoPercent + '%';
+    
+    // 保存到本地存储
+    localStorage.setItem('progress', JSON.stringify({
+        topic: topicPercent,
+        quiz: quizPercent,
+        video: videoPercent
+    }));
+}
+
+// 加载进度
+function loadProgress() {
+    const savedProgress = localStorage.getItem('progress');
+    if (savedProgress) {
+        const progress = JSON.parse(savedProgress);
+        updateProgress(progress.topic, progress.quiz, progress.video);
+    } else {
+        // 默认进度
+        updateProgress(55, 60, 40);
+    }
+}
+
+// 微分计算器函数
+function calculateDerivative() {
+    const input = document.getElementById('functionInput').value;
+    const resultElement = document.getElementById('derivativeResult');
+    const stepsElement = document.getElementById('stepByStep');
+    
+    if (!input.trim()) {
+        resultElement.textContent = 'Please enter a function';
+        return;
+    }
+    
+    // 简单微分规则
+    let derivative = '';
+    let steps = 'Steps:\n';
+    
+    try {
+        // 清理输入
+        let func = input.replace(/\s+/g, '').toLowerCase();
+        
+        // 基本规则
+        if (func.includes('^')) {
+            // 幂函数规则: d/dx(x^n) = n*x^(n-1)
+            const match = func.match(/([\d\.]*)(x)\^([\d\.]+)/);
+            if (match) {
+                const coefficient = match[1] ? parseFloat(match[1]) : 1;
+                const power = parseFloat(match[3]);
+                const newCoefficient = coefficient * power;
+                const newPower = power - 1;
+                
+                derivative = newCoefficient + 'x' + (newPower !== 1 ? '^' + newPower : '');
+                steps += `Power rule: d/dx(${coefficient}x^${power}) = ${newCoefficient}x^${newPower}\n`;
+            }
+        } else if (func === 'sin(x)') {
+            derivative = 'cos(x)';
+            steps += 'd/dx(sin(x)) = cos(x)\n';
+        } else if (func === 'cos(x)') {
+            derivative = '-sin(x)';
+            steps += 'd/dx(cos(x)) = -sin(x)\n';
+        } else if (func === 'e^x') {
+            derivative = 'e^x';
+            steps += 'd/dx(e^x) = e^x\n';
+        } else if (func === 'ln(x)') {
+            derivative = '1/x';
+            steps += 'd/dx(ln(x)) = 1/x\n';
+        } else if (func.includes('x')) {
+            // 线性函数: d/dx(ax + b) = a
+            const match = func.match(/([\d\.]*)x/);
+            if (match) {
+                const coefficient = match[1] ? parseFloat(match[1]) : 1;
+                derivative = coefficient.toString();
+                steps += `d/dx(${coefficient}x) = ${coefficient}\n`;
+            }
+        } else {
+            // 常数: d/dx(c) = 0
+            derivative = '0';
+            steps += 'd/dx(constant) = 0\n';
+        }
+        
+        resultElement.innerHTML = `f'(x) = ${derivative}`;
+        stepsElement.textContent = steps;
+        
+        // 更新进度（每次计算增加一点点）
+        const progress = JSON.parse(localStorage.getItem('progress') || '{"topic":55,"quiz":60,"video":40}');
+        if (progress.topic < 100) {
+            updateProgress(progress.topic + 1, progress.quiz, progress.video);
+        }
+        
+    } catch (error) {
+        resultElement.textContent = 'Error: Unable to calculate derivative';
+        stepsElement.textContent = 'Please use simple functions like: 3x^2, sin(x), cos(x), e^x, ln(x)';
+    }
+}
+
+// 显示示例
+function showExample() {
+    document.getElementById('functionInput').value = '2x^3 + 5x^2 - 3x + 7';
+    calculateDerivative();
+}
+
+// 插入快速函数
+function insertFunction(func) {
+    const input = document.getElementById('functionInput');
+    input.value = func;
+}
+
+// 修改页面切换函数以控制进度条显示
+function showFileOptions() {
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('fileOptions').style.display = 'block';
+    document.getElementById('progressSection').style.display = 'none';
+    document.getElementById('calculatorSection').style.display = 'none';
+}
+
+function hideFileOptions() {
+    document.getElementById('fileOptions').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    document.getElementById('progressSection').style.display = 'block';
+    document.getElementById('calculatorSection').style.display = 'block';
+}
+
+function showYoutubeOptions() {
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('youtubeOptions').style.display = 'block';
+    document.getElementById('progressSection').style.display = 'none';
+    document.getElementById('calculatorSection').style.display = 'none';
+}
+
+function hideYoutubeOptions() {
+    document.getElementById('youtubeOptions').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    document.getElementById('progressSection').style.display = 'block';
+    document.getElementById('calculatorSection').style.display = 'block';
+}
+
+// 页面加载时初始化
+document.addEventListener('DOMContentLoaded', function() {
+    showLoginForm();
+    loadProgress(); // 加载保存的进度
+    
+    // 主页面显示时显示进度条和计算器
+    if (document.getElementById('mainContainer').style.display === 'block') {
+        document.getElementById('progressSection').style.display = 'block';
+        document.getElementById('calculatorSection').style.display = 'block';
+    }
+});
+
+// 修改登录成功函数以显示进度条和计算器
+function login() {
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const errorElement = document.getElementById('loginError');
+    
+    errorElement.style.display = 'none';
+    
+    const user = users.find(u => u.username === username && u.password === password);
+    
+    if (user) {
+        document.getElementById('authPage').style.display = 'none';
+        document.getElementById('mainContainer').style.display = 'block';
+        localStorage.setItem('current_user', JSON.stringify(user));
+        
+        // 显示进度条和计算器
+        document.getElementById('progressSection').style.display = 'block';
+        document.getElementById('calculatorSection').style.display = 'block';
+        loadProgress();
+    } else {
+        errorElement.style.display = 'block';
+    }
+}
+
+// 修改访客访问函数
+function continueAsGuest() {
+    document.getElementById('authPage').style.display = 'none';
+    document.getElementById('mainContainer').style.display = 'block';
+    document.getElementById('progressSection').style.display = 'block';
+    document.getElementById('calculatorSection').style.display = 'block';
+    loadProgress();
+}
+
+</script>
+
+</body>
+</html>
