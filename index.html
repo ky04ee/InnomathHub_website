@@ -3,8 +3,11 @@
 <head>
 <title>Innomath Hub</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
 
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
 body{
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -247,7 +250,7 @@ header h1{
     font-size: 28px;
     margin-bottom: 25px;
     font-weight: 600;
-	text-align:center;
+    text-align:center;
 }
 
 .main-button {
@@ -283,7 +286,7 @@ header h1{
     font-size: 24px;
     margin-bottom: 30px;
     font-weight: 600;
-	text-align:center;
+    text-align:center;
 }
 
 .file-button {
@@ -328,12 +331,173 @@ header h1{
     background: rgba(255, 255, 255, 0.3);
 }
 
+/* Chatbot 样式 */
+.chatbot-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 350px;
+    height: 500px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.chatbot-header {
+    background: linear-gradient(135deg, #4a6bc2 0%, #027499 100%);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.chatbot-toggle {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.chatbot-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chatbot-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background: #f8f9fa;
+}
+
+.message {
+    margin-bottom: 15px;
+    padding: 12px 15px;
+    border-radius: 10px;
+    max-width: 85%;
+    line-height: 1.4;
+}
+
+.bot-message {
+    background: #e3f2fd;
+    border-left: 4px solid #4a6bc2;
+    margin-right: auto;
+}
+
+.user-message {
+    background: #4a6bc2;
+    color: white;
+    margin-left: auto;
+    border-left: 4px solid #027499;
+}
+
+.chatbot-input {
+    padding: 15px;
+    border-top: 1px solid #e0e0e0;
+    background: white;
+    display: flex;
+    gap: 10px;
+}
+
+.chatbot-input input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.chatbot-input input:focus {
+    outline: none;
+    border-color: #4a6bc2;
+}
+
+.chatbot-input button {
+    background: #4a6bc2;
+    color: white;
+    border: none;
+    padding: 0 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.chatbot-input button:hover {
+    background: #027499;
+}
+
+/* Chatbot 切换按钮 */
+.chatbot-toggle-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #4a6bc2 0%, #027499 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    z-index: 999;
+    border: 2px solid white;
+    transition: transform 0.3s;
+}
+
+.chatbot-toggle-btn:hover {
+    transform: scale(1.1);
+}
+
+/* 确保容器有足够的底部间距 */
+.container {
+    padding-bottom: 20px !important;
+}
+
+.file-options {
+    padding-bottom: 40px !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .chatbot-container {
+        width: 90%;
+        right: 5%;
+        bottom: 20px;
+        height: 400px;
+    }
+    
+    .chatbot-toggle-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+    
+    .main-container {
+        padding: 10px;
+    }
+}
+
 footer {
     padding: 20px;
     color: rgba(255, 255, 255, 0.7);
     font-size: 14px;
     border-top: 1px solid rgba(255,255,255,0.1);
-	text-align: center;
+    text-align: center;
 }
 
 /* 进度条样式 */
@@ -385,6 +549,7 @@ footer {
     border-radius: 5px;
     transition: width 0.5s ease;
 }
+
 .progress-actions {
     text-align: center;
     margin-top: 20px;
@@ -407,117 +572,6 @@ footer {
 .progress-actions small {
     color: rgba(255, 255, 255, 0.7);
     font-size: 12px;
-}
-
-/* 计算器样式 */
-.calculator-section {
-    margin: 40px auto 30px auto;
-    padding: 25px;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    max-width: 500px;
-}
-
-.calculator-title {
-    color: white;
-    font-size: 20px;
-    margin-bottom: 20px;
-    text-align: center;
-    font-weight: 600;
-}
-
-.calculator-input {
-    color: white;
-}
-
-.calculator-input label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: 500;
-}
-
-#functionInput {
-    width: 100%;
-    padding: 12px;
-    background: rgba(255, 255, 255, 0.9);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
-    font-size: 16px;
-    margin-bottom: 15px;
-    box-sizing: border-box;
-}
-
-.calculator-buttons {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.calc-btn {
-    flex: 1;
-    padding: 12px;
-    background: white;
-    color: #1a237e;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.calc-btn:hover {
-    background: #f5f5f5;
-    transform: translateY(-2px);
-}
-
-.example-btn {
-    background: rgba(255, 255, 255, 0.8);
-}
-
-.result-box {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 15px;
-    border-radius: 8px;
-    margin-top: 20px;
-    border-left: 4px solid #4FC3F7;
-}
-
-.result-box h4 {
-    margin-top: 0;
-    color: white;
-}
-
-#derivativeResult, #stepByStep {
-    font-family: 'Courier New', monospace;
-    background: rgba(0, 0, 0, 0.2);
-    padding: 10px;
-    border-radius: 5px;
-    margin: 5px 0;
-}
-
-.quick-functions {
-    margin-top: 20px;
-}
-
-.quick-functions p {
-    margin-bottom: 10px;
-    font-size: 14px;
-}
-
-.quick-btn {
-    padding: 8px 12px;
-    margin: 0 5px 5px 0;
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.quick-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
 }
 
 </style>
@@ -612,28 +666,60 @@ footer {
         
         <div class="main-content" id="mainContent">
             <div class="section-title">Study Materials</div>
-            <button class="main-button" onclick="showFileOptions()">🖊Topic 9 QUESTIONS</button>
-            <button class="main-button" onclick="openGoogleForm()">QUIZ</button>
-			<button class="main-button" onclick="showYoutubeOptions()">🎦VIDEO TUTORIALS</button>
+            <button class="main-button" onclick="showNotesOptions()">📚 TOPIC 9 NOTES</button>
+            <button class="main-button" onclick="showFileOptions()">🖊TOPIC 9 QUESTIONS</button>
+            <button class="main-button" onclick="completeQuizActivity(); openGoogleForm()">TOPIC 9 QUIZ</button>
+            <button class="main-button" onclick="showYoutubeOptions()">🎦VIDEO TUTORIALS</button>
+            <button class="main-button" onclick="openDerivativeCalculator()">🧮 DERIVATIVE CALCULATOR</button>
+        </div>
+        
+        <!-- Notes 选项 -->
+        <div class="file-options" id="notesOptions">
+            <div class="file-title">Topic 9 Notes</div>
+            <a href="https://drive.google.com/file/d/16_jSmVaoJKcnJCCuXYl7wZVzBkrEoBaH/view?usp=sharing" 
+                class="file-button" 
+                target="_blank" 
+                onclick="completeTopicActivity()">📕9.1 Derivative of a Function</a>
+    
+            <a href="https://drive.google.com/file/d/1mdlXCoYiOnMnownloDByVwjqIxsiQIg-/view?usp=sharing" 
+                class="file-button" 
+                target="_blank" 
+                onclick="completeTopicActivity()">📗9.2 Rules of Differentiation</a>
+    
+            <a href="https://drive.google.com/file/d/1VOWfXG9TSq88WxZVSwzj0S45_XqbNCxr/view?usp=sharing" 
+                class="file-button" 
+                target="_blank" 
+                onclick="completeTopicActivity()">📘9.3 Differentiation of exponential, logarithmic and trigonometric functions</a>
+            
+            <a href="https://drive.google.com/file/d/1XuAKGoUIFceA3Ln_SjEroZ-p_McVqFSo/view?usp=sharing" 
+                class="file-button" 
+                target="_blank" 
+                onclick="completeTopicActivity()">📘9.4 Implicit Differentiation</a>
+            
+            <a href="https://drive.google.com/file/d/153zDNWB7Gvu4xE65Q1yn3Azs1oVHcgPA/view?usp=sharing" 
+                class="file-button" 
+                target="_blank" 
+                onclick="completeTopicActivity()">📘9.5 Parametric Differentiation</a>
+            
+            <button class="back-button" onclick="hideNotesOptions()">← Back to Main</button>
         </div>
         
         <div class="file-options" id="fileOptions">
             <div class="file-title">Select File </div>
-            <a href="https://drive.google.com/file/d/1n-8998E7Znrykz5ZyOHFDv94RhMYDno4/view?usp=sharing" class="file-button" target="_blank">KMNS</a>
-            <a href="https://drive.google.com/file/d/1AP6yhfksl5VfavpI-S6dts6z3vslP9YO/view?usp=sharing" class="file-button" target="_blank">KMM</a>
-            <a href="https://drive.google.com/file/d/1qZly6g2X6s4MaT1wkZ48n9B0Fg0oEQGN/view?usp=sharing" class="file-button" target="_blank">KMPK</a>
+            <a href="https://drive.google.com/file/d/1n-8998E7Znrykz5ZyOHFDv94RhMYDno4/view?usp=sharing" class="file-button" target="_blank" onclick="completeTopicActivity()">KMNS</a>
+            <a href="https://drive.google.com/file/d/1AP6yhfksl5VfavpI-S6dts6z3vslP9YO/view?usp=sharing" class="file-button" target="_blank" onclick="completeTopicActivity()">KMM</a>
+            <a href="https://drive.google.com/file/d/1qZly6g2X6s4MaT1wkZ48n9B0Fg0oEQGN/view?usp=sharing" class="file-button" target="_blank" onclick="completeTopicActivity()">KMPK</a>
             <button class="back-button" onclick="hideFileOptions()">← Back to Main</button>
         </div>
         
-		<div class="file-options" id="youtubeOptions">
-			<div class="file-title">Differentiation Tutorials</div>
-    
-			<a href="" class="file-button" target="_blank">📘 Differentiation Basics</a>
-			<a href="https://www.youtube.com/watch?v=WUvTyaaNkzM" class="file-button" target="_blank">📗 Chain Rule Tutorial</a>
-			<a href="https://www.youtube.com/watch?v=YG15m2VwSjA" class="file-button" target="_blank">📙 Product & Quotient Rules</a>
-			<a href="https://www.youtube.com/watch?v=ANyVpMS3HL4" class="file-button" target="_blank">📒 Applications of Derivatives</a>
-			<button class="back-button" onclick="hideYoutubeOptions()">← Back to Main</button>
-		</div>
+        <div class="file-options" id="youtubeOptions">
+            <div class="file-title">Differentiation Tutorials</div>
+            <a href="https://www.youtube.com/watch?v=5yfh5cf4-0w" class="file-button" target="_blank" onclick="completeVideoActivity()">📘 Differentiation Basics</a>
+            <a href="https://www.youtube.com/watch?v=WUvTyaaNkzM" class="file-button" target="_blank" onclick="completeVideoActivity()">📗 Chain Rule Tutorial</a>
+            <a href="https://www.youtube.com/watch?v=YG15m2VwSjA" class="file-button" target="_blank" onclick="completeVideoActivity()">📙 Product & Quotient Rules</a>
+            <a href="https://www.youtube.com/watch?v=ANyVpMS3HL4" class="file-button" target="_blank" onclick="completeVideoActivity()">📒 Applications of Derivatives</a>
+            <button class="back-button" onclick="hideYoutubeOptions()">← Back to Main</button>
+        </div>
 
         <!-- 进度条部分 -->
         <div class="progress-section-bottom" id="progressSection">
@@ -642,78 +728,77 @@ footer {
             <div class="progress-container">
                 <div class="progress-label">
                     <span>Topic 9 Completion</span>
-                    <span class="progress-percent" id="topicProgress">55%</span>
+                    <span class="progress-percent" id="topicProgress">0%</span>
                 </div>
                 <div class="progress-bar">
-                    <div class="progress-fill" id="topicBar" style="width: 55%"></div>
+                    <div class="progress-fill" id="topicBar" style="width: 0%"></div>
                 </div>
             </div>
             
             <div class="progress-container">
                 <div class="progress-label">
                     <span>Quiz Performance</span>
-                    <span class="progress-percent" id="quizProgress">60%</span>
+                    <span class="progress-percent" id="quizProgress">0%</span>
                 </div>
                 <div class="progress-bar">
-                    <div class="progress-fill" id="quizBar" style="width: 60%"></div>
+                    <div class="progress-fill" id="quizBar" style="width: 0%"></div>
                 </div>
             </div>
             
             <div class="progress-container">
                 <div class="progress-label">
                     <span>Video Tutorials Watched</span>
-                    <span class="progress-percent" id="videoProgress">40%</span>
+                    <span class="progress-percent" id="videoProgress">0%</span>
                 </div>
                 <div class="progress-bar">
-                    <div class="progress-fill" id="videoBar" style="width: 40%"></div>
+                    <div class="progress-fill" id="videoBar" style="width: 0%"></div>
                 </div>
             </div>
-			
-			<!-- 在进度条部分添加 -->
-			<div class="progress-actions">
-				<button class="update-btn" onclick="updateProgressManually()">Update Progress</button>
-				<small>Complete activities to increase progress</small>
-			</div>
+            
+            <!-- 进度操作按钮 -->
+            <div class="progress-actions">
+                <button class="update-btn" onclick="resetProgress()" style="background: rgba(255,0,0,0.2);">Reset Progress</button>
+            </div>
         </div>
         
-        <!-- 微分计算器 -->
-        <div class="calculator-section" id="calculatorSection">
-            <h3 class="calculator-title">🧮 Differentiation Calculator</h3>
-            
-            <div class="calculator-input">
-                <label for="functionInput">Enter function f(x):</label>
-                <input type="text" id="functionInput" placeholder="e.g., 3x^2 + 2x - 5" value="3x^2 + 2x - 5">
-                
-                <div class="calculator-buttons">
-                    <button class="calc-btn" onclick="calculateDerivative()">Calculate Derivative</button>
-                    <button class="calc-btn example-btn" onclick="showExample()">Show Example</button>
-                </div>
-                
-                <div class="result-box" id="resultBox">
-                    <h4>Result:</h4>
-                    <p id="derivativeResult">Enter a function above</p>
-                    <p id="stepByStep"></p>
-                </div>
-                
-                <div class="quick-functions">
-                    <p>Quick functions:</p>
-                    <button class="quick-btn" onclick="insertFunction('x^2')">x²</button>
-                    <button class="quick-btn" onclick="insertFunction('sin(x)')">sin(x)</button>
-                    <button class="quick-btn" onclick="insertFunction('cos(x)')">cos(x)</button>
-                    <button class="quick-btn" onclick="insertFunction('e^x')">eˣ</button>
-                    <button class="quick-btn" onclick="insertFunction('ln(x)')">ln(x)</button>
-                </div>
-            </div>
-        </div>
-		
         <footer>
             © 2026 Innomathematics Hub. All rights reserved.
         </footer>
     </div>
 </div>
 
+<!-- Chatbot 容器 -->
+<div class="chatbot-container" id="chatbotContainer">
+    <div class="chatbot-header" onclick="toggleChatbot()">
+        <span>🤖 Math Buddy</span>
+        <span class="chatbot-toggle">−</span>
+    </div>
+    
+    <div class="chatbot-body">
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="message bot-message">
+                Hi! I'm your <strong>Math Formula Helper</strong>. I can provide:
+                <br>• Differentiation rules & formulas
+                <br>• Integration formulas  
+                <br>• Common math formulas
+                <br><br><strong>Try asking:</strong>
+                <br>"power rule formula"
+                <br>"integration formulas"
+            </div>
+        </div>
+        
+        <div class="chatbot-input">
+            <input type="text" id="chatbotInput" placeholder="Ask a math question...">
+            <button onclick="sendChatbotMessage()">Send</button>
+        </div>
+    </div>
+</div>
+
+<!-- Chatbot 切换按钮 -->
+<div class="chatbot-toggle-btn" id="chatbotToggleBtn" onclick="toggleChatbot()">🤖</div>
+
 <script>
-// 存储用户数据（在实际应用中应该使用服务器数据库）
+// 存储用户数据
 let users = JSON.parse(localStorage.getItem('innomath_users')) || [
     {username: 'admin', email: 'admin@example.com', password: '1234'}
 ];
@@ -751,11 +836,9 @@ function register() {
     const errorElement = document.getElementById('registerError');
     const successElement = document.getElementById('registerSuccess');
     
-    // 清除之前的消息
     errorElement.style.display = 'none';
     successElement.style.display = 'none';
     
-    // 验证输入
     if (password !== confirmPassword) {
         errorElement.textContent = 'Passwords do not match';
         errorElement.style.display = 'block';
@@ -768,21 +851,18 @@ function register() {
         return;
     }
     
-    // 检查用户名是否已存在
     if (users.some(user => user.username === username)) {
         errorElement.textContent = 'Username already exists';
         errorElement.style.display = 'block';
         return;
     }
     
-    // 检查邮箱是否已存在
     if (users.some(user => user.email === email)) {
         errorElement.textContent = 'Email already registered';
         errorElement.style.display = 'block';
         return;
     }
     
-    // 创建新用户
     const newUser = {
         username: username,
         email: email,
@@ -792,17 +872,14 @@ function register() {
     users.push(newUser);
     localStorage.setItem('innomath_users', JSON.stringify(users));
     
-    // 显示成功消息
     successElement.textContent = 'Account created successfully! Please login.';
     successElement.style.display = 'block';
     
-    // 清空表单
     document.getElementById('regUsername').value = '';
     document.getElementById('regEmail').value = '';
     document.getElementById('regPassword').value = '';
     document.getElementById('regConfirmPassword').value = '';
     
-    // 3秒后切换到登录表单
     setTimeout(() => {
         showLoginForm();
         document.getElementById('loginUsername').value = username;
@@ -817,17 +894,20 @@ function login() {
     
     errorElement.style.display = 'none';
     
-    // 查找用户
     const user = users.find(u => u.username === username && u.password === password);
     
     if (user) {
-        // 登录成功
         document.getElementById('authPage').style.display = 'none';
         document.getElementById('mainContainer').style.display = 'block';
-        // 可以在这里存储当前用户信息
         localStorage.setItem('current_user', JSON.stringify(user));
+        
+        // 显示进度条
+        document.getElementById('progressSection').style.display = 'block';
+        loadProgress();
+        
+        // 显示 Chatbot 按钮
+        document.getElementById('chatbotToggleBtn').style.display = 'flex';
     } else {
-        // 登录失败
         errorElement.style.display = 'block';
     }
 }
@@ -836,6 +916,124 @@ function login() {
 function continueAsGuest() {
     document.getElementById('authPage').style.display = 'none';
     document.getElementById('mainContainer').style.display = 'block';
+    document.getElementById('progressSection').style.display = 'block';
+    loadProgress();
+    
+    // 显示 Chatbot 按钮
+    document.getElementById('chatbotToggleBtn').style.display = 'flex';
+}
+
+// 显示 Notes 选项
+function showNotesOptions() {
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('notesOptions').style.display = 'block';
+    document.getElementById('progressSection').style.display = 'none';
+}
+
+// 隐藏 Notes 选项
+function hideNotesOptions() {
+    document.getElementById('notesOptions').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    document.getElementById('progressSection').style.display = 'block';
+}
+
+// 页面切换
+function showFileOptions() {
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('fileOptions').style.display = 'block';
+    document.getElementById('progressSection').style.display = 'none';
+}
+
+function hideFileOptions() {
+    document.getElementById('fileOptions').style.display = 'none';
+    document.getElementById('youtubeOptions').style.display = 'none';
+    document.getElementById('notesOptions').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    document.getElementById('progressSection').style.display = 'block';
+}
+
+function showYoutubeOptions() {
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('youtubeOptions').style.display = 'block';
+    document.getElementById('progressSection').style.display = 'none';
+}
+
+function hideYoutubeOptions() {
+    document.getElementById('youtubeOptions').style.display = 'none';
+    document.getElementById('notesOptions').style.display = 'none'; 
+    document.getElementById('mainContent').style.display = 'block';
+    document.getElementById('progressSection').style.display = 'block';
+}
+
+function openGoogleForm() {
+    window.open('https://forms.gle/iuWpAK8gUEqwYqVp8', '_blank');
+}
+
+// 进度管理
+function updateProgress(topicPercent, quizPercent, videoPercent) {
+    document.getElementById('topicProgress').textContent = topicPercent + '%';
+    document.getElementById('quizProgress').textContent = quizPercent + '%';
+    document.getElementById('videoProgress').textContent = videoPercent + '%';
+    
+    document.getElementById('topicBar').style.width = topicPercent + '%';
+    document.getElementById('quizBar').style.width = quizPercent + '%';
+    document.getElementById('videoBar').style.width = videoPercent + '%';
+    
+    localStorage.setItem('progress', JSON.stringify({
+        topic: topicPercent,
+        quiz: quizPercent,
+        video: videoPercent
+    }));
+}
+
+function loadProgress() {
+    const savedProgress = localStorage.getItem('progress');
+    if (savedProgress) {
+        const progress = JSON.parse(savedProgress);
+        updateProgress(progress.topic, progress.quiz, progress.video);
+    } else {
+        // 设置初始值为 0, 0, 0
+        updateProgress(0, 0, 0);
+    }
+}
+
+// 自动跟踪进度 - 用户点击按钮时自动更新
+function completeTopicActivity() {
+    const progress = JSON.parse(localStorage.getItem('progress') || '{"topic":0,"quiz":0,"video":0}');
+    if (progress.topic < 100) {
+        progress.topic = Math.min(100, progress.topic + 10);
+        updateProgress(progress.topic, progress.quiz, progress.video);
+    }
+}
+
+function completeQuizActivity() {
+    const progress = JSON.parse(localStorage.getItem('progress') || '{"topic":0,"quiz":0,"video":0}');
+    if (progress.quiz < 100) {
+        progress.quiz = Math.min(100, progress.quiz + 15);
+        updateProgress(progress.topic, progress.quiz, progress.video);
+        alert('Well done! Quiz progress increased by 15%');
+    }
+}
+
+function completeVideoActivity() {
+    const progress = JSON.parse(localStorage.getItem('progress') || '{"topic":0,"quiz":0,"video":0}');
+    if (progress.video < 100) {
+        progress.video = Math.min(100, progress.video + 25);
+        updateProgress(progress.topic, progress.quiz, progress.video);
+        alert('Good job! Video progress increased by 25%');
+    }
+}
+
+// 重置进度到 0, 0, 0
+function resetProgress() {
+    if (confirm('Are you sure you want to reset all progress to 0%?')) {
+        updateProgress(0, 0, 0);
+        alert('Progress has been reset to 0%');
+    }
+}
+
+function openDerivativeCalculator() {
+    window.open('https://www.wolframalpha.com/calculators/derivative-calculator/', '_blank');
 }
 
 // 按Enter键提交表单
@@ -843,392 +1041,301 @@ document.addEventListener('keypress', function(event) {
     if (event.key === 'Enter') {
         if (!document.getElementById('loginForm').classList.contains('hidden')) {
             login();
-        } else {
+        } else if (!document.getElementById('registerForm').classList.contains('hidden')) {
             register();
         }
     }
 });
 
-// 原有功能保持不变
-function showFileOptions() {
-    document.getElementById('mainContent').style.display = 'none';
-    document.getElementById('fileOptions').style.display = 'block';
-}
-
-function openGoogleForm() {
-    // 替换成你的Google Form链接
-    window.open('https://forms.gle/iuWpAK8gUEqwYqVp8', '_blank');
-}
-
-function hideFileOptions() {
-    document.getElementById('fileOptions').style.display = 'none';
-    document.getElementById('mainContent').style.display = 'block';
-}
-
-// 页面加载时显示登录表单
-document.addEventListener('DOMContentLoaded', function() {
-    showLoginForm();
-});
-
-function showYoutubeOptions() {
-    document.getElementById('mainContent').style.display = 'none';
-    document.getElementById('youtubeOptions').style.display = 'block';
-}
-
-// 隐藏YouTube选项
-function hideYoutubeOptions() {
-    document.getElementById('youtubeOptions').style.display = 'none';
-    document.getElementById('mainContent').style.display = 'block';
-}
-
-// 修改原来的隐藏函数，添加YouTube选项
-function hideFileOptions() {
-    document.getElementById('fileOptions').style.display = 'none';
-    document.getElementById('youtubeOptions').style.display = 'none'; // 添加这一行
-    document.getElementById('mainContent').style.display = 'block';
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    showLoginForm();
-    // 确保进度从0开始
-    if (!localStorage.getItem('progress')) {
-        localStorage.setItem('progress', JSON.stringify({topic: 0, quiz: 0, video: 0}));
-    }
-    loadProgress();
-});
-	
-function loadProgress() {
-    const savedProgress = localStorage.getItem('progress');
-    if (savedProgress) {
-        const progress = JSON.parse(savedProgress);
-        updateProgress(progress.topic, progress.quiz, progress.video);
-    } else {
-        // 从0开始
-        updateProgress(0, 0, 0);
-    }
-}
-
-// 修复进度更新函数，只在完成学习活动时增长
-function updateProgressOnActivity(activityType) {
-    const progress = JSON.parse(localStorage.getItem('progress') || '{"topic":55,"quiz":60,"video":40}');
-    
-    // 根据活动类型增加对应的进度
-    switch(activityType) {
-        case 'practice':
-            if (progress.topic < 100) {
-                progress.topic = Math.min(100, progress.topic + 5); // 每次练习增加5%
-            }
-            break;
-        case 'quiz':
-            if (progress.quiz < 100) {
-                progress.quiz = Math.min(100, progress.quiz + 10); // 每次测验增加10%
-            }
-            break;
-        case 'video':
-            if (progress.video < 100) {
-                progress.video = Math.min(100, progress.video + 20); // 每次看视频增加20%
-            }
-            break;
-    }
-    
-    updateProgress(progress.topic, progress.quiz, progress.video);
-}
-// 添加这些函数来更新进度
-function updateProgressManually() {
-    const progress = JSON.parse(localStorage.getItem('progress') || '{"topic":0,"quiz":0,"video":0}');
-    
-    // 询问用户完成了什么活动
-    const activity = prompt('What did you complete?\n1. Practice questions\n2. Quiz\n3. Video tutorial\n\nEnter 1, 2, or 3:');
-    
-    switch(activity) {
-        case '1':
-            progress.topic = Math.min(100, progress.topic + 10);
-            alert('Great! Practice progress increased by 10%');
-            break;
-        case '2':
-            progress.quiz = Math.min(100, progress.quiz + 15);
-            alert('Well done! Quiz progress increased by 15%');
-            break;
-        case '3':
-            progress.video = Math.min(100, progress.video + 20);
-            alert('Good job! Video progress increased by 20%');
-            break;
-        default:
-            alert('No progress updated. Please enter 1, 2, or 3 next time.');
-    }
-    
-    updateProgress(progress.topic, progress.quiz, progress.video);
-}
-
-// 自动更新进度的函数
-function completePractice() {
-    const progress = JSON.parse(localStorage.getItem('progress') || '{"topic":0,"quiz":0,"video":0}');
-    if (progress.topic < 100) {
-        progress.topic = Math.min(100, progress.topic + 5);
-        updateProgress(progress.topic, progress.quiz, progress.video);
-    }
-}
-
-function completeQuiz() {
-    const progress = JSON.parse(localStorage.getItem('progress') || '{"topic":0,"quiz":0,"video":0}');
-    if (progress.quiz < 100) {
-        progress.quiz = Math.min(100, progress.quiz + 10);
-        updateProgress(progress.topic, progress.quiz, progress.video);
-    }
-}
-
-function completeVideo() {
-    const progress = JSON.parse(localStorage.getItem('progress') || '{"topic":0,"quiz":0,"video":0}');
-    if (progress.video < 100) {
-        progress.video = Math.min(100, progress.video + 15);
-        updateProgress(progress.topic, progress.quiz, progress.video);
-    }
-}
-
-// 替换 calculateDerivative() 函数
-function calculateDerivative() {
-    const input = document.getElementById('functionInput').value.trim();
-    const resultElement = document.getElementById('derivativeResult');
-    const stepsElement = document.getElementById('stepByStep');
-    
-    if (!input) {
-        resultElement.textContent = 'Please enter a function';
-        stepsElement.textContent = '';
-        return;
-    }
-    
-    // 简单但有效的微分计算
-    try {
-        // 清理输入，允许空格
-        let func = input.replace(/\s+/g, '');
-        
-        // 支持的函数类型
-        let derivative = '';
-        let steps = 'Steps:\n';
-        
-        // 1. 幂函数: ax^n
-        if (func.includes('x^')) {
-            const match = func.match(/(-?\d*)x\^(-?\d+)/);
-            if (match) {
-                const coefficient = match[1] === '' || match[1] === '-' ? (match[1] === '-' ? -1 : 1) : parseInt(match[1]);
-                const power = parseInt(match[2]);
-                
-                const newCoefficient = coefficient * power;
-                const newPower = power - 1;
-                
-                if (newPower === 0) {
-                    derivative = newCoefficient.toString();
-                } else if (newPower === 1) {
-                    derivative = newCoefficient + 'x';
-                } else {
-                    derivative = newCoefficient + 'x^' + newPower;
-                }
-                
-                steps += `Power rule: d/dx(${coefficient}x^${power}) = ${newCoefficient}x^${newPower}\n`;
-            }
-        }
-        // 2. 线性函数: ax
-        else if (func.includes('x') && !func.includes('^')) {
-            const match = func.match(/(-?\d*)x/);
-            if (match) {
-                const coefficient = match[1] === '' || match[1] === '-' ? (match[1] === '-' ? -1 : 1) : parseInt(match[1]);
-                derivative = coefficient.toString();
-                steps += `d/dx(${coefficient}x) = ${coefficient}\n`;
-            }
-        }
-        // 3. 三角函数
-        else if (func === 'sin(x)') {
-            derivative = 'cos(x)';
-            steps += 'd/dx(sin(x)) = cos(x)\n';
-        }
-        else if (func === 'cos(x)') {
-            derivative = '-sin(x)';
-            steps += 'd/dx(cos(x)) = -sin(x)\n';
-        }
-        // 4. 指数和对数
-        else if (func === 'e^x') {
-            derivative = 'e^x';
-            steps += 'd/dx(e^x) = e^x\n';
-        }
-        else if (func === 'ln(x)') {
-            derivative = '1/x';
-            steps += 'd/dx(ln(x)) = 1/x\n';
-        }
-        // 5. 多项式: 3x^2 + 2x + 1
-        else if (func.includes('+') || func.includes('-')) {
-            // 简单的多项式处理
-            derivative = calculatePolynomialDerivative(func);
-            steps += 'Using power rule on each term\n';
-        }
-        // 6. 常数
-        else if (!isNaN(func)) {
-            derivative = '0';
-            steps += 'd/dx(constant) = 0\n';
-        }
-        else {
-            derivative = '无法计算，请使用标准格式';
-            steps = '支持格式: x^2, 3x, sin(x), cos(x), e^x, ln(x), 3x^2+2x+1';
-        }
-        
-        resultElement.textContent = `f'(x) = ${derivative}`;
-        stepsElement.textContent = steps;
-        
-        // 计算成功时增加一点点进度（可选）
-        const progress = JSON.parse(localStorage.getItem('progress') || '{"topic":0,"quiz":0,"video":0}');
-        if (progress.topic < 100 && derivative !== '无法计算，请使用标准格式') {
-            progress.topic = Math.min(100, progress.topic + 1);
-            updateProgress(progress.topic, progress.quiz, progress.video);
-        }
-        
-    } catch (error) {
-        resultElement.textContent = 'Error: 请使用标准格式';
-        stepsElement.textContent = '示例: 3x^2, 2x+5, sin(x), e^x';
-    }
-}
-
-// 多项式微分计算
-function calculatePolynomialDerivative(func) {
-    // 分割各项
-    const terms = func.replace(/([+-])/g, ' $1').trim().split(/\s+/);
-    let derivativeTerms = [];
-    
-    for (let term of terms) {
-        if (term === '+' || term === '-') continue;
-        
-        let cleanTerm = term;
-        let sign = '';
-        
-        if (cleanTerm.startsWith('+') || cleanTerm.startsWith('-')) {
-            sign = cleanTerm[0];
-            cleanTerm = cleanTerm.substring(1);
-        }
-        
-        // 处理 x^n
-        if (cleanTerm.includes('x^')) {
-            const parts = cleanTerm.split('x^');
-            let coeff = parts[0] === '' ? 1 : parseFloat(parts[0]);
-            const power = parseFloat(parts[1]);
-            
-            if (sign === '-') coeff = -coeff;
-            
-            const newCoeff = coeff * power;
-            const newPower = power - 1;
-            
-            let newTerm = '';
-            if (newCoeff !== 0) {
-                newTerm = (newCoeff >= 0 ? '+' : '') + 
-                         (Math.abs(newCoeff) !== 1 ? Math.abs(newCoeff) : '') + 
-                         'x' + 
-                         (newPower !== 1 ? '^' + newPower : '');
-                derivativeTerms.push(newTerm);
-            }
-        }
-        // 处理 x
-        else if (cleanTerm.includes('x') && !cleanTerm.includes('^')) {
-            let coeff = cleanTerm.replace('x', '');
-            coeff = coeff === '' ? 1 : parseFloat(coeff);
-            
-            if (sign === '-') coeff = -coeff;
-            
-            if (coeff !== 0) {
-                derivativeTerms.push((coeff >= 0 ? '+' : '') + coeff);
-            }
-        }
-        // 常数项忽略（导数为0）
-    }
-    
-    let result = derivativeTerms.join('');
-    if (result.startsWith('+')) result = result.substring(1);
-    return result || '0';
-}
-
-// 修改 showExample() 函数
-function showExample() {
-    document.getElementById('functionInput').value = '3x^2 + 2x - 5';
-    calculateDerivative();
-}
-
-// 插入快速函数
-function insertFunction(func) {
-    const input = document.getElementById('functionInput');
-    input.value = func;
-}
-
-// 修改页面切换函数以控制进度条显示
-function showFileOptions() {
-    document.getElementById('mainContent').style.display = 'none';
-    document.getElementById('fileOptions').style.display = 'block';
-    document.getElementById('progressSection').style.display = 'none';
-    document.getElementById('calculatorSection').style.display = 'none';
-}
-
-function hideFileOptions() {
-    document.getElementById('fileOptions').style.display = 'none';
-    document.getElementById('mainContent').style.display = 'block';
-    document.getElementById('progressSection').style.display = 'block';
-    document.getElementById('calculatorSection').style.display = 'block';
-}
-
-function showYoutubeOptions() {
-    document.getElementById('mainContent').style.display = 'none';
-    document.getElementById('youtubeOptions').style.display = 'block';
-    document.getElementById('progressSection').style.display = 'none';
-    document.getElementById('calculatorSection').style.display = 'none';
-}
-
-function hideYoutubeOptions() {
-    document.getElementById('youtubeOptions').style.display = 'none';
-    document.getElementById('mainContent').style.display = 'block';
-    document.getElementById('progressSection').style.display = 'block';
-    document.getElementById('calculatorSection').style.display = 'block';
-}
-
 // 页面加载时初始化
 document.addEventListener('DOMContentLoaded', function() {
     showLoginForm();
-    loadProgress(); // 加载保存的进度
-    
-    // 主页面显示时显示进度条和计算器
-    if (document.getElementById('mainContainer').style.display === 'block') {
-        document.getElementById('progressSection').style.display = 'block';
-        document.getElementById('calculatorSection').style.display = 'block';
-    }
+    // Chatbot 按钮默认隐藏
+    document.getElementById('chatbotToggleBtn').style.display = 'none';
 });
 
-// 修改登录成功函数以显示进度条和计算器
-function login() {
-    const username = document.getElementById('loginUsername').value.trim();
-    const password = document.getElementById('loginPassword').value;
-    const errorElement = document.getElementById('loginError');
+// Chatbot 功能
+let chatbotOpen = false;
+
+// 切换 Chatbot 显示/隐藏
+function toggleChatbot() {
+    const chatbot = document.getElementById('chatbotContainer');
+    const toggleBtn = document.getElementById('chatbotToggleBtn');
     
-    errorElement.style.display = 'none';
-    
-    const user = users.find(u => u.username === username && u.password === password);
-    
-    if (user) {
-        document.getElementById('authPage').style.display = 'none';
-        document.getElementById('mainContainer').style.display = 'block';
-        localStorage.setItem('current_user', JSON.stringify(user));
-        
-        // 显示进度条和计算器
-        document.getElementById('progressSection').style.display = 'block';
-        document.getElementById('calculatorSection').style.display = 'block';
-        loadProgress();
+    if (chatbotOpen) {
+        chatbot.style.display = 'none';
+        toggleBtn.style.display = 'flex';
+        chatbotOpen = false;
     } else {
-        errorElement.style.display = 'block';
+        chatbot.style.display = 'flex';
+        toggleBtn.style.display = 'none';
+        chatbotOpen = true;
+        
+        // 滚动到底部
+        setTimeout(() => {
+            const messages = document.getElementById('chatbotMessages');
+            if (messages) messages.scrollTop = messages.scrollHeight;
+        }, 100);
     }
 }
 
-// 修改访客访问函数
-function continueAsGuest() {
-    document.getElementById('authPage').style.display = 'none';
-    document.getElementById('mainContainer').style.display = 'block';
-    document.getElementById('progressSection').style.display = 'block';
-    document.getElementById('calculatorSection').style.display = 'block';
-    loadProgress();
+// 发送消息
+function sendChatbotMessage() {
+    const input = document.getElementById('chatbotInput');
+    const message = input.value.trim();
+    
+    if (!message) return;
+    
+    // 显示用户消息
+    addMessage(message, 'user');
+    input.value = '';
+    
+    // 模拟思考中...
+    setTimeout(() => {
+        // 获取机器人回复
+        const reply = getBotReply(message);
+        addMessage(reply, 'bot');
+    }, 500);
 }
 
-</script>
+// 添加消息到聊天界面
+function addMessage(text, sender) {
+    const messages = document.getElementById('chatbotMessages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}-message`;
+    messageDiv.innerHTML = text.replace(/\n/g, '<br>');
+    messages.appendChild(messageDiv);
+    
+    // 滚动到底部
+    messages.scrollTop = messages.scrollHeight;
+    
+    // 如果有 MathJax，刷新数学公式
+    if (window.MathJax) {
+        MathJax.typesetPromise([messageDiv]).catch(err => console.log('MathJax error:', err));
+    }
+}
 
+// 优化后的 getBotReply 函数
+function getBotReply(userMessage) {
+    const message = userMessage.toLowerCase().trim();
+    
+    // 问候语
+    if (message.includes('hello') || message.includes('hi') || message.includes('hey')) {
+        return "Hi! I'm your **Math Formula Assistant**. Ask me for specific formulas like 'power rule', 'chain rule', or 'ln derivative'.";
+    }
+    
+    // 根据关键词提供对应的公式
+    if (message.includes('power rule')) {
+        return getPowerRuleFormula();
+    }
+    
+    if (message.includes('chain rule')) {
+        return getChainRuleFormula();
+    }
+    
+    if (message.includes('product rule')) {
+        return getProductRuleFormula();
+    }
+    
+    if (message.includes('quotient rule')) {
+        return getQuotientRuleFormula();
+    }
+    
+    if (message.includes('ln') || message.includes('logarithm')) {
+        return getLogarithmFormula(message);
+    }
+    
+    if (message.includes('sin') || message.includes('cos') || message.includes('tan') || message.includes('trig')) {
+        return getTrigonometricFormula(message);
+    }
+    
+    if (message.includes('e^') || message.includes('exponential') || message.includes('exp')) {
+        return getExponentialFormula();
+    }
+    
+    if (message.includes('derivative') || message.includes('differentiate')) {
+        return getDerivativeFormulas();
+    }
+    
+    if (message.includes('integral') || message.includes('integrate')) {
+        return getIntegrationFormulas();
+    }
+    
+    if (message.includes('help') || message.includes('what can') || message.includes('formula')) {
+        return getFormulaIndex();
+    }
+    
+    // 默认回复
+    return "I provide math formulas! Try asking for:\n• 'power rule formula'\n• 'chain rule formula'\n• 'ln derivative formula'\n• 'integration formulas'\n• 'trigonometric derivatives'";
+}
+
+// 专门提供公式的函数
+function getPowerRuleFormula() {
+    return `**Power Rule Formula:**
+    
+\\(\\frac{d}{dx}[x^n] = nx^{n-1}\\)
+
+**Examples:**
+\\(\\frac{d}{dx}[x^3] = 3x^2\\)
+\\(\\frac{d}{dx}[x^{-2}] = -2x^{-3}\\)
+\\(\\frac{d}{dx}[\\sqrt{x}] = \\frac{1}{2\\sqrt{x}}\\)`;
+}
+
+function getChainRuleFormula() {
+    return `**Chain Rule Formula:**
+    
+\\(\\frac{d}{dx}[f(g(x))] = f'(g(x)) \\cdot g'(x)\\)
+
+**Alternative notation:**
+If \\(y = f(u)\\) and \\(u = g(x)\\), then
+\\(\\frac{dy}{dx} = \\frac{dy}{du} \\cdot \\frac{du}{dx}\\)
+
+**Example:**
+\\(\\frac{d}{dx}[\\sin(x^2)] = \\cos(x^2) \\cdot 2x\\)`;
+}
+
+function getProductRuleFormula() {
+    return `**Product Rule Formula:**
+    
+\\(\\frac{d}{dx}[u(x)v(x)] = u'(x)v(x) + u(x)v'(x)\\)
+
+**Example:**
+\\(\\frac{d}{dx}[x \\sin(x)] = \\sin(x) + x\\cos(x)\\)`;
+}
+
+function getQuotientRuleFormula() {
+    return `**Quotient Rule Formula:**
+    
+\\(\\frac{d}{dx}\\left[\\frac{u(x)}{v(x)}\\right] = \\frac{u'(x)v(x) - u(x)v'(x)}{[v(x)]^2}\\)
+
+**Example:**
+\\(\\frac{d}{dx}\\left[\\frac{\\sin(x)}{x}\\right] = \\frac{x\\cos(x) - \\sin(x)}{x^2}\\)`;
+}
+
+function getLogarithmFormula(message) {
+    if (message.includes('5x') || message.includes('ln(')) {
+        return `**Logarithm Derivative Formulas:**
+        
+Basic: \\(\\frac{d}{dx}[\\ln(x)] = \\frac{1}{x}\\)
+
+Chain rule version: \\(\\frac{d}{dx}[\\ln(f(x))] = \\frac{f'(x)}{f(x)}\\)
+
+**Specific cases:**
+\\(\\frac{d}{dx}[\\ln(5x)] = \\frac{1}{x}\\)
+\\(\\frac{d}{dx}[\\ln(x^2)] = \\frac{2}{x}\\)
+\\(\\frac{d}{dx}[\\ln(\\sin(x))] = \\cot(x)\\)`;
+    }
+    
+    return `**Logarithm Derivative:**
+    
+\\(\\frac{d}{dx}[\\ln(x)] = \\frac{1}{x}\\)
+
+\\(\\frac{d}{dx}[\\log_a(x)] = \\frac{1}{x \\ln(a)}\\)`;
+}
+
+function getTrigonometricFormula(message) {
+    return `**Trigonometric Derivatives:**
+    
+\\(\\frac{d}{dx}[\\sin(x)] = \\cos(x)\\)
+\\(\\frac{d}{dx}[\\cos(x)] = -\\sin(x)\\)
+\\(\\frac{d}{dx}[\\tan(x)] = \\sec^2(x)\\)
+\\(\\frac{d}{dx}[\\cot(x)] = -\\csc^2(x)\\)
+\\(\\frac{d}{dx}[\\sec(x)] = \\sec(x)\\tan(x)\\)
+\\(\\frac{d}{dx}[\\csc(x)] = -\\csc(x)\\cot(x)\\)
+
+**Chain rule examples:**
+\\(\\frac{d}{dx}[\\sin(ax)] = a\\cos(ax)\\)
+\\(\\frac{d}{dx}[\\cos(x^2)] = -2x\\sin(x^2)\\)`;
+}
+
+function getExponentialFormula() {
+    return `**Exponential Derivatives:**
+    
+\\(\\frac{d}{dx}[e^x] = e^x\\)
+\\(\\frac{d}{dx}[a^x] = a^x \\ln(a)\\)
+\\(\\frac{d}{dx}[e^{f(x)}] = e^{f(x)} \\cdot f'(x)\\)
+\\(\\frac{d}{dx}[a^{f(x)}] = a^{f(x)} \\ln(a) \\cdot f'(x)\\)
+
+**Examples:**
+\\(\\frac{d}{dx}[e^{2x}] = 2e^{2x}\\)
+\\(\\frac{d}{dx}[2^x] = 2^x \\ln(2)\\)
+\\(\\frac{d}{dx}[e^{x^2}] = 2xe^{x^2}\\)`;
+}
+
+function getDerivativeFormulas() {
+    return `**Basic Derivative Formulas:**
+
+**Power Rules:**
+\\(\\frac{d}{dx}[c] = 0\\) (constant)
+\\(\\frac{d}{dx}[x^n] = nx^{n-1}\\) (power rule)
+\\(\\frac{d}{dx}[cf(x)] = cf'(x)\\) (constant multiple)
+
+**Sum/Difference:**
+\\(\\frac{d}{dx}[f(x) \\pm g(x)] = f'(x) \\pm g'(x)\\)
+
+**Product/Quotient:**
+\\(\\frac{d}{dx}[f(x)g(x)] = f'(x)g(x) + f(x)g'(x)\\)
+\\(\\frac{d}{dx}\\left[\\frac{f(x)}{g(x)}\\right] = \\frac{f'(x)g(x) - f(x)g'(x)}{[g(x)]^2}\\)
+
+**Chain Rule:**
+\\(\\frac{d}{dx}[f(g(x))] = f'(g(x)) \\cdot g'(x)\\)`;
+}
+
+function getIntegrationFormulas() {
+    return `**Basic Integration Formulas:**
+
+**Power Rule:**
+\\(\\int x^n \\, dx = \\frac{x^{n+1}}{n+1} + C\\) (for \\(n \\neq -1\\))
+
+**Exponential:**
+\\(\\int e^x \\, dx = e^x + C\\)
+\\(\\int a^x \\, dx = \\frac{a^x}{\\ln(a)} + C\\)
+
+**Trigonometric:**
+\\(\\int \\sin(x) \\, dx = -\\cos(x) + C\\)
+\\(\\int \\cos(x) \\, dx = \\sin(x) + C\\)
+\\(\\int \\sec^2(x) \\, dx = \\tan(x) + C\\)
+
+**Logarithmic:**
+\\(\\int \\frac{1}{x} \\, dx = \\ln|x| + C\\)
+
+**Rules:**
+\\(\\int [f(x) + g(x)] \\, dx = \\int f(x) \\, dx + \\int g(x) \\, dx\\)
+\\(\\int cf(x) \\, dx = c \\int f(x) \\, dx\\)`;
+}
+
+function getFormulaIndex() {
+    return `**Available Formula Categories:**
+
+**Differentiation:**
+• 'power rule formula'
+• 'chain rule formula' 
+• 'product rule formula'
+• 'quotient rule formula'
+• 'ln derivative formula'
+• 'trigonometric derivatives'
+• 'exponential derivatives'
+• 'all derivative formulas'
+
+**Integration:**
+• 'integration formulas'
+• 'basic integrals'
+
+**Specific Functions:**
+• 'derivative of sin(ax)'
+• 'derivative of ln(5x)'
+• 'derivative of e^x'
+• 'integral of x^n'
+
+**Simply ask for the formula you need!**`;
+}
+
+// 按 Enter 键发送消息（Chatbot输入框）
+document.getElementById('chatbotInput').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        sendChatbotMessage();
+    }
+});
+</script>
 </body>
 </html>
